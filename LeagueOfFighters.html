@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="shortcut icon" href="./static/LeagueOfFighters/icono.png"/>
+  <title>League of Fighters</title>
+  <td><img src="./static/LeagueOfFighters/logo.png" width="500" height ="320" id="0"></td>
+  <br><br>
+  <td><img src="./static/LeagueOfFighters/B.png" width="10" height ="180" id="8"></td>
+  <style type="text/css">
+	.tipo_texto{
+	  text-decoration: none;
+	  padding: 10px;
+	  font-weight: 600;
+	  font-size: 20px;
+	  color: #ffffff;
+	  background-color: #400c58;
+	  border-radius: 6px;
+	  border: 2px solid #f824ff;
+	}
+	.tipo_texto:hover{
+	  color: #1883ba;
+	  background-color: #ffffff;
+	}
+  </style>
+
+</head>
+
+<body id="body" background="./static/LeagueOfFighters/fondo.jpg"  style="background-repeat: no-repeat;background-attachment: fixed; background-size: 100%;background-color:rgb(187, 14, 173)" align= 'center'>
+<table align='center' cellpadding="0" cellspacing="0">
+  <tr>
+    <td><img src="./static/LeagueOfFighters/L.png" id="1" name="L" width="160" height ="220" onclick ='displayID(this);'></td>
+	<td><img src="./static/LeagueOfFighters/L.png" id="2" name="L" width="160" height ="220" onclick ='displayID(this);'></td>
+	<td><img src="./static/LeagueOfFighters/L.png" id="3" name="L"  width="160" height ="220" onclick ='displayID(this);'></td>
+	<td><img src="./static/LeagueOfFighters/B.png" id="4" name="B" width="190" height ="220" onclick ='displayID(this);'></td>
+    <td><img src="./static/LeagueOfFighters/R.png" id="5" name="R"  width="190" height ="220" onclick ='displayID(this);'></td>
+	<td><img src="./static/LeagueOfFighters/R.png" id="6" name="R"  width="190" height ="220" onclick ='displayID(this);'></td>
+	<td><img src="./static/LeagueOfFighters/R.png" id="7" name="R"  width="190" height ="220" onclick ='displayID(this);'></td>
+  </tr>
+
+</table>
+<br>
+<button type="submit"  class="tipo_texto" onclick="location.href='/'">Home</button>
+<button type="submit"  class="tipo_texto" onClick="refreshPage()">Reset</button>
+<button type="submit"  class="tipo_texto" onClick="rana_aleatoria()">Aleatoriza</button>
+<button type="submit"  class="tipo_texto" onClick="algoritmo_hardcoded()">Resolver v1</button>
+<button type="submit"  class="tipo_texto" onClick="algoritmo_recursive()">Resolver Recursivo</button>
+
+<script type="text/javascript">
+function displayID(el)
+{
+	var id_el = parseInt(el.id, 10);
+//	alert(document.getElementById(el.id).name)
+	if (document.getElementById(el.id).src.includes("L.png"))
+	{
+//		alert("It is a Left Frog")
+
+		//Can I move straght forward?
+		if(document.getElementById(id_el+1).src.includes("B.png"))
+		{
+//			alert("Moving the frog forward!")
+			frog_swap(id_el,id_el+1)
+		} else {
+			if(document.getElementById(id_el+2).src.includes("B.png"))
+			{
+//				alert("Moving the frog forward!")
+				frog_swap(id_el,id_el+2)
+			}
+		}
+
+	} else {
+		if (document.getElementById(el.id).src.includes("R.png"))
+		{
+			if(document.getElementById(id_el-1).src.includes("B.png"))
+			{
+//				alert("Moving the frog forward!")
+				frog_swap(id_el,id_el-1)
+			} else {
+			if(document.getElementById(id_el-2).src.includes("B.png"))
+			{
+//				alert("Moving the frog forward!")
+				frog_swap(id_el,id_el-2)
+			}
+		}
+
+		} else {
+			alert("No puedes mover un espacio en blanco noob")
+		}
+
+
+
+	}
+	checkWin();
+	checkBlock();
+}
+
+function frog_swap(i,j)
+{
+	var copy_src = document.getElementById(i).src;
+	document.getElementById(i).src = document.getElementById(j).src;
+	document.getElementById(j).src = copy_src;
+}
+
+function refreshPage(){
+    window.location.reload();
+}
+
+function checkWin(machine=false){
+	var derecha = false;
+	var izquierda = false;
+
+	if(document.getElementById(3).src.includes("R.png"))
+		if(document.getElementById(2).src.includes("R.png"))
+			if(document.getElementById(1).src.includes("R.png"))
+				derecha = true;
+	if(document.getElementById(5).src.includes("L.png"))
+		if(document.getElementById(6).src.includes("L.png"))
+			if(document.getElementById(7).src.includes("L.png"))
+				izquierda = true;
+	if(derecha)
+		if(izquierda)
+			if(machine){
+				return true
+			}else {
+				setTimeout(()=>{
+				pop_up_win();
+			},1)
+			}
+	if(machine){
+		return(false);
+	}
+}
+
+
+function checkBlock(machine=false){
+	if(	document.getElementById(1).src.includes("L.png") &&
+		document.getElementById(2).src.includes("R.png") &&
+		document.getElementById(3).src.includes("R.png")){
+
+		if(machine){
+			return (true);
+		}else {
+			setTimeout(()=>{
+			pop_up_lose();
+		},1)
+		}
+	}
+
+	if(	document.getElementById(5).src.includes("L.png") &&
+		document.getElementById(6).src.includes("L.png") &&
+		document.getElementById(7).src.includes("R.png")){
+
+		if(machine){
+			return (true);
+		}else {
+			setTimeout(()=>{
+			pop_up_lose();
+		},1)
+		}
+
+	}
+
+	for(var i=1;i<=4;i++){
+		if(
+			document.getElementById(i).src.includes("L.png") &&
+			document.getElementById(i+1).src.includes("L.png") &&
+			document.getElementById(i+2).src.includes("R.png") &&
+			document.getElementById(i+3).src.includes("R.png")){
+
+		if(machine){
+			return (true);
+		}else {
+			setTimeout(()=>{
+			pop_up_lose();
+		},1)
+		}
+		}
+	}
+	if(machine){
+		return(false);
+	}
+}
+
+
+function rana_aleatoria(){
+	for (var i=1;i<=7;i++){
+		j=Math.floor(Math.random() * 7)+1;
+		while ((j <= 0)||(j >= 8)){
+			j=Math.floor(Math.random() * 7)+1;
+		}
+		frog_swap(i,j)
+	}
+	checkWin();
+	checkBlock();
+}
+
+function algoritmo_hardcoded(){
+	setTimeout(()=>{ frog_swap(4,3);},250);
+	setTimeout(()=>{ frog_swap(3,5);},500);
+	setTimeout(()=>{ frog_swap(5,6);},1000);
+	setTimeout(()=>{ frog_swap(6,4);},1250);
+	setTimeout(()=>{ frog_swap(4,2);},1500);
+	setTimeout(()=>{ frog_swap(2,1);},1750);
+	setTimeout(()=>{ frog_swap(1,3);},2000);
+	setTimeout(()=>{ frog_swap(3,5);},2250);
+	setTimeout(()=>{ frog_swap(5,7);},2500);
+	setTimeout(()=>{ frog_swap(7,6);},2750);
+	setTimeout(()=>{ frog_swap(6,4);},3000);
+	setTimeout(()=>{ frog_swap(4,2);},3250);
+	setTimeout(()=>{ frog_swap(2,3);},3500);
+	setTimeout(()=>{ frog_swap(3,5);},3750);
+	setTimeout(()=>{ frog_swap(5,4);},4000);
+	setTimeout(()=>{
+			pop_up_win();
+	},3999)
+}
+
+var time2wait = 0;
+function algoritmo_recursive(){
+	//alert("algoritmo_recursive");
+	var posiciones = new Array(7);
+	var pos_blanco=0;
+	for(var i=1;i<=7;i++){
+		if(document.getElementById(i).src.includes("L.png")){
+			posiciones[i-1]="L";
+		} else {
+			if(document.getElementById(i).src.includes("R.png")){
+				posiciones[i-1]="R";
+			} else {
+				posiciones[i-1]="B";
+				pos_blanco = i-1;
+			}
+		}
+	}
+	//alert(posiciones[pos_blanco]);
+	time2wait = 0;
+	frogleap_recursive(posiciones, pos_blanco);
+}
+
+function frogleap_recursive(posiciones, posicion_blanco, nivel_recursion=0){
+//		alert(posiciones[posicion_blanco-2]);
+	var movimiento_actual=0, movimientos = [-2,-1,1,2];
+	var posiciones_cambiada;
+	console.log("nivel_recursion:", nivel_recursion);
+
+	if(nivel_recursion>=3){
+		return(-1);
+	}
+
+	for(var i=0;i<4;i++){
+		movimiento_actual=movimientos[i];
+		console.log("movimiento_actual:", movimiento_actual);
+		console.log("posiciones_blanco:", posicion_blanco);
+		console.log("posiciones:", posiciones);
+
+		if (posicion_blanco + movimiento_actual >= 0){
+			if(posiciones[posicion_blanco+movimiento_actual]=="L"){
+				time2wait = time2wait + 1000;
+
+				console.log("movimiento_actual:", movimiento_actual);
+
+				setTimeout(()=>{ frog_swap(posicion_blanco+movimiento_actual+1,posicion_blanco+1); },time2wait);
+				posiciones_menos2 = array_swap(posiciones,posicion_blanco+movimiento_actual,posicion_blanco);
+
+				if(array_checkWin(posiciones_cambiada)){
+					return(1);
+				}
+
+				respuesta = frogleap_recursive(posiciones_cambiada,posicion_blanco+movimiento_actual,nivel_recursion+1)
+				if(respuesta < 0){
+					time2wait = time2wait + 1000;
+					//alert(time2wait);
+					setTimeout(()=>{ frog_swap(posicion_blanco+movimiento_actual+1,posicion_blanco+1); },time2wait);
+					return(-1);
+				} else {
+					return(1);
+				}
+			}
+		}
+	}
+	return(-1);
+}
+
+function pop_up_win() {
+	document.getElementById(0).src = './static/LeagueOfFighters/win.png';
+	document.getElementById(0).style= "width:600px; height:485px;margin-left: -110px"
+	document.getElementById(8).style= "height:0px;"
+}
+
+function pop_up_lose() {
+	document.getElementById(0).src = './static/LeagueOfFighters/lose.png';
+	document.getElementById(0).style= "width:450px; height:485px;margin-left: -50px"
+	document.getElementById(8).style= "height:0px;"
+}
+
+function array_swap(posiciones,i,j)
+{
+	var copy_aux = posiciones[i];
+	posiciones[i] = posiciones[j];
+	posiciones[j] = copy_aux;
+	return(posiciones);
+}
+
+function array_checkWin(posiciones){
+	var derecha = false;
+	var izquierda = false;
+
+	if(posiciones[2]=="R")
+		if(posiciones[1]=="R")
+			if(posiciones[0]=="R")
+				derecha = true;
+	if(posiciones[4]=="L")
+		if(posiciones[5]=="L")
+			if(posiciones[6]=="L")
+				izquierda = true;
+	if(derecha)
+		if(izquierda)
+			return (true)
+	
+	return(false);
+}
+
+</script>
+</body>
+</html>
